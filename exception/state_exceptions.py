@@ -13,4 +13,19 @@ class NoTransitionWithThisAction(Exception):
 
     def __str__(self) -> str:
         return f"NoTransitionWithThisAction: Current State: {self.state} - Input Action: {self.action}"
+
+
+class ActionAlreadyExists(Exception):
+    """Exception when duplicate action tends to be added to the transitions dictionary
+
+    Args:
+        action (state.state.Action): Input action 
+    """
+
+    def __init__(self, action, *args: object) -> None:
+        super().__init__(*args)
+        self.action = action
+
+    def __str__(self) -> str:
+        return f"ActionAlreadyExists: [{self.action}] already exists in transitions mapping"
         
