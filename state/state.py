@@ -8,8 +8,17 @@ class Action:
     Action to change state based on
     """
 
-    def __init__(self, name) -> None:
+    def __init__(self, name: str) -> None:
+        """Initialize Action
+
+        Args:
+            name (str): the name of the action
+        """
+
         self.name = name
+
+    def __str__(self) -> str:
+        return f'({self.name})'
 
 
 class State:
@@ -66,6 +75,9 @@ class State:
 
         self.transitions[action] = next_state
 
+    def __str__(self) -> str:
+        return f'[[{self.name}]]'
+
 
 class StartState(State):
     """State class with isStart attribute enabled
@@ -82,6 +94,9 @@ class StartState(State):
         """
         super().__init__(name, isStart=True)
 
+    def __str__(self) -> str:
+        return f'[#[{self.name}]#]'
+
 
 class EndState(State):
     """State class with isEnd attribute Enabled
@@ -97,3 +112,6 @@ class EndState(State):
             name (str): the name of the state
         """
         super().__init__(name, isEnd=True)
+
+    def __str__(self) -> str:
+        return f'[![{self.name}]!]'
