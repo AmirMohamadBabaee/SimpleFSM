@@ -1,6 +1,6 @@
+from __future__ import annotations
 from typing import Dict
 from exception.state_exceptions import ActionAlreadyExists, NoTransitionWithThisAction
-from __future__ import annotations
 
 
 class Action:
@@ -20,12 +20,15 @@ class Action:
     def __str__(self) -> str:
         return f'({self.name})'
 
+    def __repr__(self) -> str:
+        return self.__str__()
+
 
 class State:
     """FSM state
     """
 
-    def __init__(self, name: str, transitions: Dict[Action, State], isStart: bool=False, isEnd: bool=False) -> None:
+    def __init__(self, name: str, transitions: Dict[Action, State]=None, isStart: bool=False, isEnd: bool=False) -> None:
         """initialize state
 
         Args:
@@ -36,7 +39,7 @@ class State:
         """
 
         self.name           = name
-        self.transitions    = transitions
+        self.transitions    = transitions if transitions else dict()
         self.isStart        = isStart
         self.isEnd          = isEnd
 
@@ -53,7 +56,7 @@ class State:
             State: next state based on transitions dictionary
         """
 
-        next_state = self.transitions.get(Action)
+        next_state = self.transitions.get(action)
         if not next_state:
             raise NoTransitionWithThisAction(self, action)
         
@@ -77,6 +80,9 @@ class State:
 
     def __str__(self) -> str:
         return f'[[{self.name}]]'
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 class StartState(State):
