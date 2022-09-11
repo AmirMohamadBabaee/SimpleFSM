@@ -13,3 +13,4 @@ class NoTransitionWithThisAction(Exception):
 
     def __str__(self) -> str:
         return f"NoTransitionWithThisAction: Current State: {self.state} - Input Action: {self.action}"
+        

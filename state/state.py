@@ -79,3 +79,4 @@ class EndState(State):
             name (str): the name of the state
         """
         super().__init__(name, isEnd=True)
+        
