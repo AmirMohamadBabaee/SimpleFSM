@@ -1,6 +1,6 @@
 from __future__ import annotations
-from typing import Dict
-from exception.state_exceptions import ActionAlreadyExists, NoTransitionWithThisAction
+from typing import Any, Callable, Dict
+from exception.state_exceptions import ActionAlreadyExists, NoHandlerSet, NoTransitionWithThisAction
 
 
 class Action:
@@ -28,18 +28,20 @@ class State:
     """FSM state
     """
 
-    def __init__(self, name: str, transitions: Dict[Action, State]=None, isStart: bool=False, isEnd: bool=False) -> None:
+    def __init__(self, name: str, transitions: Dict[Action, State]=None, handler: Callable=None, isStart: bool=False, isEnd: bool=False) -> None:
         """initialize state
 
         Args:
             name (str): the name of the state
             transitions (Dict[Action, State]): mapping between the current state and next state based on input action
+            handler (Callable): function to be run when the flow reaches the state
             isStart (bool, optional): determine whether the state is start state. Defaults to False.
             isEnd (bool, optional): determine whether the state is end state. Defaults to False.
         """
 
         self.name           = name
         self.transitions    = transitions if transitions else dict()
+        self.handler        = handler
         self.isStart        = isStart
         self.isEnd          = isEnd
 
@@ -77,6 +79,12 @@ class State:
             raise ActionAlreadyExists(action)
 
         self.transitions[action] = next_state
+
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        if not self.handler:
+            raise NoHandlerSet
+            
+        return self.handler(*args, **kwds)
 
     def __str__(self) -> str:
         return f'[[{self.name}]]'
