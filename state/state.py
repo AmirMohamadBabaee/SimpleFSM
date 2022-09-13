@@ -82,8 +82,8 @@ class State:
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         if not self.handler:
-            raise NoHandlerSet
-            
+            raise NoHandlerSet(self)
+
         return self.handler(*args, **kwds)
 
     def __str__(self) -> str:
@@ -108,6 +108,9 @@ class StartState(State):
         """
         super().__init__(name, isStart=True)
 
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        print('Start State')
+
     def __str__(self) -> str:
         return f'[#[{self.name}]#]'
 
@@ -126,6 +129,9 @@ class EndState(State):
             name (str): the name of the state
         """
         super().__init__(name, isEnd=True)
+
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        print('End State')
 
     def __str__(self) -> str:
         return f'[![{self.name}]!]'
