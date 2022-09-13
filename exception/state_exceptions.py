@@ -28,4 +28,19 @@ class ActionAlreadyExists(Exception):
 
     def __str__(self) -> str:
         return f"ActionAlreadyExists: [{self.action}] already exists in transitions mapping"
+
+
+class NoHandlerSet(Exception):
+    """Exception when calling a state which does not have any handlers
+
+    Args:
+        state (state.state.State): current state
+    """
+
+    def __init__(self, state, *args: object) -> None:
+        super().__init__(*args)
+        self.state = state
+
+    def __str__(self) -> str:
+        return f"NoHandlerSet: [{self.state}] does not have any handlers"
         
