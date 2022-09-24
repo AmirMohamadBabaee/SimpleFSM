@@ -1,6 +1,14 @@
+"""
+This module has the implementation of States and Actions objects
+"""
+
 from __future__ import annotations
 from typing import Any, Callable, Dict
-from exception.state_exceptions import ActionAlreadyExists, NoHandlerSet, NoTransitionWithThisAction
+from exception.state_exceptions import (
+    ActionAlreadyExists,
+    NoHandlerSet,
+    NoTransitionWithThisAction
+)
 
 
 class Action:
@@ -28,24 +36,37 @@ class State:
     """FSM state
     """
 
-    def __init__(self, name: str, transitions: Dict[Action, State]=None, handler: Callable=None, isStart: bool=False, isEnd: bool=False) -> None:
+    def __init__(self,                                  \
+                name: str,                              \
+                transitions: Dict[Action, State]=None,  \
+                handler: Callable=None,                 \
+                is_start: bool=False,                   \
+                is_end: bool=False                      \
+        ) -> None:
         """initialize state
 
         Args:
             name (str): the name of the state
-            transitions (Dict[Action, State]): mapping between the current state and next state based on input action
+            transitions (Dict[Action, State]): mapping between the current state and
+            next state based on input action
+
             handler (Callable): function to be run when the flow reaches the state
-            isStart (bool, optional): determine whether the state is start state. Defaults to False.
-            isEnd (bool, optional): determine whether the state is end state. Defaults to False.
+            is_start (bool, optional): determine whether the state is start state.
+                Defaults to False.
+            is_end (bool, optional): determine whether the state is end state.
+                Defaults to False.
         """
 
         self.name           = name
-        self.transitions    = transitions if transitions else dict()
+        self.transitions    = transitions
         self.handler        = handler
-        self.isStart        = isStart
-        self.isEnd          = isEnd
+        self.is_start        = is_start
+        self.is_end          = is_end
 
-    def nextState(self, action: Action) -> State:
+        if not self.transitions:
+            self.transitions = {}
+
+    def next_state(self, action: Action) -> State:
         """determine next state based on input action and transitions dictionary
 
         Args:
@@ -61,10 +82,10 @@ class State:
         next_state = self.transitions.get(action)
         if not next_state:
             raise NoTransitionWithThisAction(self, action)
-        
+
         return next_state
 
-    def addTransition(self, action: Action, next_state: State) -> None:
+    def add_transition(self, action: Action, next_state: State) -> None:
         """add new transition pair (action, next_state) to the current state
 
         Args:
@@ -94,7 +115,7 @@ class State:
 
 
 class StartState(State):
-    """State class with isStart attribute enabled
+    """State class with is_start attribute enabled
 
     Parents:
         State : FSM state
@@ -106,7 +127,7 @@ class StartState(State):
         Args:
             name (str): the name of the state
         """
-        super().__init__(name, isStart=True)
+        super().__init__(name, is_start=True)
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         print('Start State')
@@ -116,7 +137,7 @@ class StartState(State):
 
 
 class EndState(State):
-    """State class with isEnd attribute Enabled
+    """State class with is_end attribute Enabled
 
     Parents:
         State : FSM state
@@ -128,7 +149,7 @@ class EndState(State):
         Args:
             name (str): the name of the state
         """
-        super().__init__(name, isEnd=True)
+        super().__init__(name, is_end=True)
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         print('End State')

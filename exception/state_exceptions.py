@@ -1,9 +1,13 @@
+"""
+This module has Exceptions related to Actions, States, and Machines
+"""
+
 class NoTransitionWithThisAction(Exception):
     """Exception when there is no next state for a defined action in a state
 
     Args:
         state (state.state.State): current state of the FSM
-        action (state.state.Action): Input action 
+        action (state.state.Action): Input action
     """
 
     def __init__(self, state, action, *args: object) -> None:
@@ -12,14 +16,17 @@ class NoTransitionWithThisAction(Exception):
         self.action = action
 
     def __str__(self) -> str:
-        return f"NoTransitionWithThisAction: Current State: {self.state} - Input Action: {self.action}"
+        return (f"{self.__class__.__name__}:"
+                f"Current State: {self.state} - "
+                f"Input Action: {self.action}"
+        )
 
 
 class ActionAlreadyExists(Exception):
     """Exception when duplicate action tends to be added to the transitions dictionary
 
     Args:
-        action (state.state.Action): Input action 
+        action (state.state.Action): Input action
     """
 
     def __init__(self, action, *args: object) -> None:
