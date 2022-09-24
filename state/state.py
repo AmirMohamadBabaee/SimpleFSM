@@ -4,6 +4,7 @@ This module has the implementation of States and Actions objects
 
 from __future__ import annotations
 from typing import Any, Callable, Dict
+from dataclasses import dataclass, field
 from exception.state_exceptions import (
     ActionAlreadyExists,
     NoHandlerSet,
@@ -31,19 +32,11 @@ class Action:
     def __repr__(self) -> str:
         return self.__str__()
 
-
+@dataclass
 class State:
     """FSM state
-    """
 
-    def __init__(self,                                  \
-                name: str,                              \
-                transitions: Dict[Action, State]=None,  \
-                handler: Callable=None,                 \
-                is_start: bool=False,                   \
-                is_end: bool=False                      \
-        ) -> None:
-        """initialize state
+        initialize state
 
         Args:
             name (str): the name of the state
@@ -56,15 +49,11 @@ class State:
             is_end (bool, optional): determine whether the state is end state.
                 Defaults to False.
         """
-
-        self.name           = name
-        self.transitions    = transitions
-        self.handler        = handler
-        self.is_start        = is_start
-        self.is_end          = is_end
-
-        if not self.transitions:
-            self.transitions = {}
+    name: str
+    transitions: Dict[Action, State] = field(default_factory=dict)
+    handler: Callable=None
+    is_start: bool=False
+    is_end: bool=False
 
     def next_state(self, action: Action) -> State:
         """determine next state based on input action and transitions dictionary

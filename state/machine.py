@@ -34,10 +34,10 @@ class FiniteStateMachine:
         """
 
         previous_state = self.current_state
-        self.current_state = self.current_state.nextState(action)
-        print(f'{previous_state} --{action}--> {self.current_state}')
+        self.current_state = self.current_state.next_state(action)
+        print(f'{previous_state}\t--{action}--> {self.current_state}')
 
-        if self.current_state.isEnd:
+        if self.current_state.is_end:
             self.is_enable = False
 
     def run_transitions(self, actions: List[Action]) -> None:
