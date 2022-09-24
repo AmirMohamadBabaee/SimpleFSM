@@ -55,15 +55,15 @@ print(f'INPUT: {INPUT_STR}')
 print()
 input_list = INPUT_STR.split() + ['<eos>']
 
-def alph2num_handler(token):
-    """simple handler to convert alphabetical numbers
-    to their numerical forms.
+def token2action_handler(token: str) -> Action:
+    """simple handler to generate action based on
+    current token.
 
     Args:
-        token (_type_): _description_
+        token (str): input token
 
     Returns:
-        _type_: _description_
+        Action: generated action
     """
     if token in text2num:
         return is_number_action
@@ -72,7 +72,7 @@ def alph2num_handler(token):
 
     return is_text_action
 
-actions = list(map(alph2num_handler, input_list))
+actions = list(map(token2action_handler, input_list))
 
 FINAL_OUTPUT = ''
 for i, action in enumerate(actions):
